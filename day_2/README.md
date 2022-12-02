@@ -43,3 +43,7 @@ Following the Elf's instructions for the second column, what would your total sc
 Your puzzle answer was 13490.
 
 Both parts of this puzzle are complete! They provide two gold stars: **
+
+```sh
+    gfortran main.f90 -o main && ./main
+```
