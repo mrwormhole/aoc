@@ -86,6 +86,9 @@ module rock_paper_scissors
     contains
 
     subroutine calculate_points(enemy_choice, player_choice, points)
+
+        implicit none
+
         character(len = 1), intent(in) :: enemy_choice, player_choice
         integer, intent (out) :: points
         integer :: player_index, enemy_index
@@ -101,6 +104,9 @@ module rock_paper_scissors
     end subroutine calculate_points
 
     subroutine calculate_points_via_strategy(enemy_choice, strategy, points)
+
+        implicit none
+
         character(len = 1), intent(in) :: enemy_choice, strategy
         integer, intent (out) :: points
         integer :: expected_player_index, enemy_index, strategy_index
@@ -121,5 +127,4 @@ module rock_paper_scissors
 
         call calculate_points(enemy_choices(enemy_index+1), player_choices(expected_player_index+1), points)
     end subroutine
-    
 end module rock_paper_scissors
