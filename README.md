@@ -3,8 +3,8 @@ Spending hours mindlessly to whip the puzzles with my garbage solutions in weird
 
 Language Randomizer Go!
 
-day 1 -> rust
-day 2 -> fortran
-day 3 -> julia
+* day 1 -> rust
+* day 2 -> fortran
+* day 3 -> julia
 
 **disclaimer: this is definitely NOT caused by the hype or the interest, this is some BDSM curiosity.**
