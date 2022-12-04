@@ -2,12 +2,12 @@ program day_2
 
     use str_list
     use rock_paper_scissors
-    Use, intrinsic :: iso_fortran_env, Only : iostat_end
+    use, intrinsic :: iso_fortran_env, only : iostat_end
     implicit none
 
     character(len = *), parameter :: filename = "input.txt"
     character(len = 1), dimension(:), allocatable :: enemy_turns, player_turns
-    character(len = 1):: enemy_turn, player_turn
+    character(len = 1) :: enemy_turn, player_turn
     integer :: error, rounds, i, out_point, total_points
 
     rounds = 0
@@ -48,6 +48,8 @@ program day_2
 end program day_2
 
 module str_list
+
+    implicit none
     contains
 
     subroutine add_to_list(list, element)
@@ -79,10 +81,8 @@ end module str_list
 module rock_paper_scissors
 
     implicit none
-    
     character(len=1), dimension(3) :: enemy_choices = [character(len=1) :: "A", "B", "C"]         
     character(len=1), dimension(3) :: player_choices = [character(len=1) :: "X", "Y", "Z"]        
-
     contains
 
     subroutine calculate_points(enemy_choice, player_choice, points)
