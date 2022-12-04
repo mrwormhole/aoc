@@ -6,5 +6,6 @@ Language Randomizer Go!
 * day 1 -> rust
 * day 2 -> fortran
 * day 3 -> julia
+* day 4 -> common lisp
 
 **disclaimer: this is definitely NOT caused by the hype or the interest, this is some BDSM curiosity.**
