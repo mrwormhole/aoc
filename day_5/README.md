@@ -109,5 +109,5 @@ Your puzzle answer was `FGLQJCMBD`.
 Both parts of this puzzle are complete! They provide two gold stars: **
 
 ```
-    perl main.perl
+    perl main.pl
 ```
