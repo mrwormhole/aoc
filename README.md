@@ -8,5 +8,6 @@ Language Randomizer Go!
 * day 3 -> julia
 * day 4 -> common lisp
 * day 5 -> perl
+* day 6 -> nim
 
 **disclaimer: this is definitely NOT caused by the hype or the interest, this is some BDSM curiosity.**

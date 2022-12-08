@@ -1,6 +1,6 @@
 import sequtils
 
-proc solve():void =
+proc solve():void=
   var file = open("input.txt")
   defer:
     file.close()
