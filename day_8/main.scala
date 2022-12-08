@@ -15,6 +15,7 @@ object Main {
             }
             points.append(rowPoints)
         }
+        var transposedPoints: ArrayBuffer[ArrayBuffer[Int]] = points.clone().transpose
 
         def isDirectionVisible(value: Int, direction: ArrayBuffer[Int]): Boolean = {
             if (direction.length == 1 && value <= direction(0)) {
@@ -60,13 +61,11 @@ object Main {
             if (isDirectionVisible(points(i)(j), right)) {
                 shouldAdd = true
             }
-            var transposed: ArrayBuffer[ArrayBuffer[Int]] = points.clone().transpose
-            val top: ArrayBuffer[Int] = transposed(j).take(i).reverse
+            val top: ArrayBuffer[Int] = transposedPoints.clone()(j).take(i).reverse
             if (isDirectionVisible(points(i)(j), top)) {
                 shouldAdd = true
             }
-            transposed = points.clone().transpose
-            val bottom: ArrayBuffer[Int] = transposed(j).takeRight(points.length - i - 1)
+            val bottom: ArrayBuffer[Int] = transposedPoints.clone()(j).takeRight(points.length - i - 1)
             if (isDirectionVisible(points(i)(j), bottom)) {
                 shouldAdd = true
             }
