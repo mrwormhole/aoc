@@ -1,4 +1,3 @@
-open System.IO
 open System.Collections.Generic
 
 type Point2D =
@@ -47,14 +46,12 @@ let solve_rope1(lines: seq<string>) : int =
     visited.Add((0, 0)) |> ignore
     lines |> Seq.iter (fun line -> 
         let m = get_move(line)
-
         for i in 0..(abs(m.x)) do
             let mutable visiting = true
-            match m.x with
+            match m.x with 
             | x when x > 0 && i <> abs(m.x) -> head.x <- head.x + 1
             | _ when i <> abs(m.x) -> head.x <- head.x - 1
             | _ -> visiting <- false
-
             match visiting with
             | visiting when visiting ->
                 tail <- calculate_tail(head, tail)
@@ -67,7 +64,6 @@ let solve_rope1(lines: seq<string>) : int =
             | y when y > 0 && j <> abs(m.y) -> head.y <- head.y + 1
             | _  when j <> abs(m.y) -> head.y <- head.y - 1
             | _ -> visiting <- false
-
             match visiting with
             | visiting when visiting ->
                 tail <- calculate_tail(head, tail)
@@ -76,7 +72,6 @@ let solve_rope1(lines: seq<string>) : int =
     )
     visited.Count
 
-
 let solve_rope2(lines: seq<string>) : int = 
     let mutable head = new Point2D(0, 0)
     let mutable knots = List[ for i in 1..10 -> new Point2D(0, 0) ]
@@ -84,14 +79,12 @@ let solve_rope2(lines: seq<string>) : int =
     visited.Add((0, 0)) |> ignore
     lines |> Seq.iter (fun line ->
         let m = get_move(line)
-
         for i in 0..(abs(m.x)) do
             let mutable visiting = true
             match m.x with
             | x when x > 0 && i <> abs(m.x) -> head.x <- head.x + 1
             | _ when i <> abs(m.x) -> head.x <- head.x - 1
             | _ -> visiting <- false
-
             match visiting with
             | visiting when visiting ->
                 for t in 0..8 do
@@ -111,7 +104,6 @@ let solve_rope2(lines: seq<string>) : int =
             | y when y > 0 && j <> abs(m.y) -> head.y <- head.y + 1
             | _ when j <> abs(m.y) -> head.y <- head.y - 1
             | _ -> visiting <- false
-
             match visiting with
             | visiting when visiting ->
                 for t in 0..8 do
@@ -124,7 +116,6 @@ let solve_rope2(lines: seq<string>) : int =
                     knots.Item(t).y <- res.y
                 visited.Add((knots.Item(8).x, knots.Item(8).y)) |> ignore   
             | _ -> ()
-    
     )
     visited.Count
 
