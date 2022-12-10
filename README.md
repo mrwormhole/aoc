@@ -11,5 +11,7 @@ Language Randomizer Go!
 * day 6 -> nim
 * day 7 -> python
 * day 8 -> scala
+* day 9 -> fsharp
+* day 10 ->
 
 **disclaimer: this is definitely NOT caused by the hype or the interest, this is some BDSM curiosity.**
