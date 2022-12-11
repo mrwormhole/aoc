@@ -12,6 +12,6 @@ Language Randomizer Go!
 * day 7 -> python
 * day 8 -> scala
 * day 9 -> fsharp
-* day 10 ->
+* day 10 -> cobol
 
 **disclaimer: this is definitely NOT caused by the hype or the interest, this is some BDSM curiosity.**
