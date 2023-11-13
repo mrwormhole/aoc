@@ -1,5 +1,3 @@
 # aoc-2023
 
-Ziguanas Time to Shine :lizard:
-
-**disclaimer: I do not encourage the use of zig on any production systems.**
+I will keep it as boring as possible this year, I just realized becoming a dino is a good thing. Do not expect/wishlist any fancy programming languages this year.
