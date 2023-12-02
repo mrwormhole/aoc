@@ -9,7 +9,10 @@ import (
 	"unicode"
 )
 
-const filename = "./testdata/day1_input.txt"
+const filename = "../testdata/day1_input.txt"
+
+// First Star = 54634
+// Second Star = 53855
 
 func main() {
 	raw, err := os.ReadFile(filename)
@@ -17,8 +20,47 @@ func main() {
 		log.Fatalf("os.ReadFile(%v): %v", filename, err)
 	}
 
-	sum := 0
 	lines := strings.Split(string(raw), "\n")
+	fmt.Println("first sum:", part1(lines))
+	fmt.Println("second sum:", part2(lines))
+}
+
+func part1(lines []string) int {
+	sum := 0
+
+	for _, line := range lines {
+		if strings.TrimSpace(line) == "" {
+			continue
+		}
+
+		var calibrationValues []string
+		for _, r := range line {
+			if unicode.IsDigit(r) {
+				calibrationValues = append(calibrationValues, string(r))
+			}
+		}
+
+		var s string
+		if len(calibrationValues) > 2 {
+			s = string(calibrationValues[0]) + string(calibrationValues[len(calibrationValues)-1])
+		} else if len(calibrationValues) == 1 {
+			s = string(calibrationValues[0]) + string(calibrationValues[0])
+		} else {
+			s = string(calibrationValues[0]) + string(calibrationValues[1])
+		}
+
+		val, err := strconv.Atoi(s)
+		if err != nil {
+			log.Fatalf("strconv.Atoi(%v): %v", s, err)
+		}
+
+		sum += val
+	}
+	return sum
+}
+
+func part2(lines []string) int {
+	sum := 0
 
 	for _, line := range lines {
 		if strings.TrimSpace(line) == "" {
@@ -76,7 +118,5 @@ func main() {
 
 		sum += val
 	}
-	fmt.Println("sum: ", sum)
-	// First Star = 54634
-	// Second Star = 53855
+	return sum
 }
