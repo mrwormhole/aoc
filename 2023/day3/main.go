@@ -27,7 +27,6 @@ func main() {
 	}
 
 	lines := strings.Split(string(raw), "\n")
-
 	fmt.Println("first sum:", part1(lines))
 	fmt.Println("second sum:", part2(lines))
 }
