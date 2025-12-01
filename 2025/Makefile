@@ -48,7 +48,7 @@ help:
 	@echo "  make run [DAY=N]         - Build and run day N with input.txt"
 	@echo "  make run-sample [DAY=N]  - Build and run day N with sample.txt"
 	@echo "  make fmt                 - Format all days with clang-format"
-	@echo "  make clean       	      - Clean all days"
+	@echo "  make clean               - Clean all days"
 	@echo ""
 	@echo "Examples:"
 	@echo "  make DAY=5               - Build day 5"

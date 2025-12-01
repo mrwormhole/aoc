@@ -9,7 +9,7 @@ Usage:
   make run [DAY=N]         - Build and run day N with input.txt
   make run-sample [DAY=N]  - Build and run day N with sample.txt
   make fmt                 - Format all days with clang-format
-  make clean                  - Clean all days
+  make clean               - Clean all days
 
 Examples:
   make DAY=5               - Build day 5
