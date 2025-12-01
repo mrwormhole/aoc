@@ -1,0 +1,32 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug Day",
+            "type": "lldb-dap",
+            "request": "launch",
+            "program": "${workspaceFolder}/day${input:dayNumber}/main",
+            "args": ["${input:inputFile}"],
+            "cwd": "${workspaceFolder}/day${input:dayNumber}",
+            "preLaunchTask": "build-day"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "dayNumber",
+            "type": "promptString",
+            "description": "Enter day number (1-25)",
+            "default": "1"
+        },
+        {
+            "id": "inputFile",
+            "type": "pickString",
+            "description": "Select input file",
+            "options": [
+                "input.txt",
+                "sample.txt"
+            ],
+            "default": "input.txt"
+        }
+    ]
+}
