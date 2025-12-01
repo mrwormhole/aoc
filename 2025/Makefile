@@ -31,13 +31,8 @@ run: build
 run-sample: build
 	@cd $(DAY_DIR) && ./main sample.txt
 
-# Clean specific day
-clean:
-	@rm -f $(TARGET)
-	@echo "Cleaned day$(DAY)"
-
 # Clean all days
-clean-all:
+clean:
 	@find . -name "main" -type f -delete
 	@echo "Cleaned all days"
 
@@ -52,9 +47,8 @@ help:
 	@echo "  make [DAY=N]             - Build day N (default: 1)"
 	@echo "  make run [DAY=N]         - Build and run day N with input.txt"
 	@echo "  make run-sample [DAY=N]  - Build and run day N with sample.txt"
-	@echo "  make fmt              - Format all days with clang-format"
-	@echo "  make clean [DAY=N]       - Clean day N"
-	@echo "  make clean-all           - Clean all days"
+	@echo "  make fmt                 - Format all days with clang-format"
+	@echo "  make clean       	      - Clean all days"
 	@echo ""
 	@echo "Examples:"
 	@echo "  make DAY=5               - Build day 5"

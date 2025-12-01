@@ -4,10 +4,12 @@ I am practicing C++17 this year to be better in the fundamental syntax. I also i
 
 ```
 > make help
+Usage:
+  make [DAY=N]             - Build day N (default: 1)
+  make run [DAY=N]         - Build and run day N with input.txt
   make run-sample [DAY=N]  - Build and run day N with sample.txt
-  make fmt              - Format all days with clang-format
-  make clean [DAY=N]       - Clean day N
-  make clean-all           - Clean all days
+  make fmt                 - Format all days with clang-format
+  make clean                  - Clean all days
 
 Examples:
   make DAY=5               - Build day 5
