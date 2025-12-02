@@ -1,7 +1,10 @@
 #include <cmath>
+#include <expected>
+#include <format>
 #include <fstream>
 #include <print>
 #include <sstream>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -9,8 +12,9 @@
 
 using namespace std;
 
-vector<pair<unsigned long, unsigned long>>
-parseRanges(const std::string &line) {
+using Pairs = vector<pair<unsigned long, unsigned long>>;
+
+expected<Pairs, runtime_error> parseRanges(const string &line) {
   vector<pair<unsigned long, unsigned long>> ranges;
   stringstream ss(line);
   string s;
@@ -22,8 +26,9 @@ parseRanges(const std::string &line) {
         unsigned long start = stoul(s.substr(0, dashPos));
         unsigned long end = stoul(s.substr(dashPos + 1));
         ranges.push_back({start, end});
-      } catch (const std::exception &e) {
-        log("ERR: Invalid range format: {}", s);
+      } catch (const exception &e) {
+        return unexpected(runtime_error(
+            format("failed to parse range({}): ", s).append(e.what())));
       }
     }
   }
@@ -31,7 +36,7 @@ parseRanges(const std::string &line) {
   return ranges;
 }
 
-unsigned long processFile(ifstream &file) {
+expected<unsigned long, runtime_error> processFile(ifstream &file) {
   unsigned long res = 0;
 
   string line;
@@ -41,8 +46,11 @@ unsigned long processFile(ifstream &file) {
     }
 
     auto ranges = parseRanges(line);
+    if (!ranges.has_value()) {
+      return unexpected(ranges.error());
+    }
 
-    for (const auto &range : ranges) {
+    for (const auto &range : ranges.value()) {
       log("Range: {}-{}", range.first, range.second);
       for (auto i = range.first; i < range.second + 1; i++) {
         auto s = to_string(i);
@@ -60,23 +68,7 @@ unsigned long processFile(ifstream &file) {
   return res;
 }
 
-vector<size_t> computePatternLengths(size_t len) {
-  vector<size_t> patternLengths;
-  auto sqrtLen = static_cast<size_t>(sqrt(len)) + 1;
-
-  for (size_t i = 1; i < sqrtLen; i++) {
-    if (len % i == 0) {
-      patternLengths.push_back(i);
-
-      if (i != len / i) {
-        patternLengths.push_back(len / i);
-      }
-    }
-  }
-  return patternLengths;
-}
-
-unsigned long processFileV2(ifstream &file) {
+expected<unsigned long, runtime_error> processFileV2(ifstream &file) {
   unsigned long res = 0;
 
   string line;
@@ -86,18 +78,19 @@ unsigned long processFileV2(ifstream &file) {
     }
 
     auto ranges = parseRanges(line);
+    if (!ranges.has_value()) {
+      return unexpected(ranges.error());
+    }
 
-    for (const auto &range : ranges) {
+    for (const auto &range : ranges.value()) {
       log("Range: {}-{}", range.first, range.second);
       for (auto i = range.first; i < range.second + 1; i++) {
         auto s = to_string(i);
         bool found = false;
         auto len = s.length();
 
-        auto patternLengths = computePatternLengths(len);
-
-        for (auto patternLen : patternLengths) {
-          if (patternLen == len) {
+        for (size_t patternLen = 1; patternLen < len / 2 + 1; patternLen++) {
+          if (len % patternLen != 0) {
             continue;
           }
 
@@ -136,18 +129,25 @@ int main(int argc, char *argv[]) {
 
   ifstream file(filename);
   if (!file.is_open()) {
-    log("ERR: Could not open file={}", filename);
+    log("could not open file=({})", filename);
     return 1;
   }
 
-  unsigned long res = processFile(file);
-  std::print("Result 1={}\n", res);
+  if (auto res = processFile(file); res.has_value()) {
+    print("Result 1={}\n", res.value());
+  } else {
+    log("processFile(): {}", res.error().what());
+    return 1;
+  }
 
   file.clear();  // clear EOF flag
   file.seekg(0); // rewind to beginning
 
-  unsigned long res2 = processFileV2(file);
-  std::print("Result 2={}\n", res2);
-
+  if (auto res = processFileV2(file); res.has_value()) {
+    print("Result 2={}\n", res.value());
+  } else {
+    log("processFileV2(): {}", res.error().what());
+    return 1;
+  }
   return 0;
 }

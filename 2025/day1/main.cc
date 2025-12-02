@@ -1,28 +1,34 @@
+#include <expected>
+#include <format>
 #include <fstream>
 #include <print>
+#include <stdexcept>
 #include <string>
 
 #include "../log.hpp"
 
 constexpr uint START = 50;
 
-unsigned int processFile(std::ifstream &file) {
+using namespace std;
+
+expected<unsigned int, runtime_error> processFile(ifstream &file) {
   unsigned int count = 0;
   unsigned int res = START;
 
-  std::string line;
-  while (std::getline(file, line)) {
+  string line;
+  while (getline(file, line)) {
     if (line.empty()) {
       continue;
     }
 
     char rotation = line[0];
-    unsigned int units;
+    unsigned int units = 0;
     try {
-      units = std::stoi(line.substr(1));
-    } catch (const std::exception &e) {
-      log("ERR: Invalid format with line={}", line);
-      continue;
+      units = stoi(line.substr(1));
+    } catch (const exception &e) {
+      return unexpected(
+          runtime_error(format("failed to parse units from line({}): ", line)
+                            .append(e.what())));
     }
     log("Rotation={}, Units={}", rotation, units);
 
@@ -40,23 +46,24 @@ unsigned int processFile(std::ifstream &file) {
   return count;
 }
 
-unsigned int processFileV2(std::ifstream &file) {
+expected<unsigned int, runtime_error> processFileV2(ifstream &file) {
   unsigned int count = 0;
   unsigned int res = START;
 
-  std::string line;
-  while (std::getline(file, line)) {
+  string line;
+  while (getline(file, line)) {
     if (line.empty()) {
       continue;
     }
 
     char rotation = line[0];
-    unsigned int units;
+    unsigned int units = 0;
     try {
-      units = std::stoi(line.substr(1));
-    } catch (const std::exception &e) {
-      log("ERR: Invalid format with line={}", line);
-      continue;
+      units = stoi(line.substr(1));
+    } catch (const exception &e) {
+      return unexpected(
+          runtime_error(format("failed to parse units from line({}): ", line)
+                            .append(e.what())));
     }
     log("Rotation={}, Units={}", rotation, units);
 
@@ -83,24 +90,32 @@ unsigned int processFileV2(std::ifstream &file) {
 }
 
 int main(int argc, char *argv[]) {
-  std::string filename;
+  string filename;
   if (argc > 1) {
     filename = argv[1];
   }
 
-  std::ifstream file(filename);
+  ifstream file(filename);
   if (!file.is_open()) {
-    log("ERR: Could not open file={}", filename);
+    log("could not open file({})", filename);
     return 1;
   }
 
-  unsigned int res = processFile(file);
-  std::print("Result 1={}\n", res);
+  if (auto res = processFile(file); res.has_value()) {
+    print("Result 1={}\n", res.value());
+  } else {
+    log("processFile(): {}", res.error().what());
+    return 1;
+  }
 
   file.clear();  // clear EOF flag
   file.seekg(0); // rewind to beginning
 
-  unsigned int res2 = processFileV2(file);
-  std::print("Result 2={}\n", res2);
+  if (auto res = processFileV2(file); res.has_value()) {
+    print("Result 2={}\n", res.value());
+  } else {
+    log("processFileV2(): {}", res.error().what());
+    return 1;
+  }
   return 0;
 }
