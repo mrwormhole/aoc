@@ -1,6 +1,6 @@
 # aoc-2025
 
-I am practicing C++17 this year to be better in the fundamental syntax. I also included a Makefile to automate the days and I added vscode config to automate lldb (clang debugger) on vscode.
+I am practicing C++23 this year to be better in the fundamental syntax. I also included a Makefile to automate the days and I added vscode config to automate lldb (clang debugger) on vscode.
 
 ```
 > make help

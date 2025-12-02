@@ -2,27 +2,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build-day",
+            "label": "build-all-days",
             "type": "shell",
-            "command": "make",
-            "args": [
-                "build",
-                "DAY=${input:dayNumber}",
-                "CXXFLAGS=-std=c++17 -Wall -Wextra -g"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "problemMatcher": ["$gcc"]
-        }
-    ],
-    "inputs": [
-        {
-            "id": "dayNumber",
-            "type": "promptString",
-            "description": "Enter day number (1-25)",
-            "default": "1"
+            "command": "bash -c 'for dir in day*/; do day=$(echo $dir | grep -o \"[0-9]*\"); make build DAY=$day CXXFLAGS=\"-std=c++23 -Wall -Wextra -g\"; done'"
         }
     ]
 }

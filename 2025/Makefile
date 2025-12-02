@@ -1,5 +1,5 @@
-CXX = clang++
-CXXFLAGS = -std=c++17 -Wall -Wextra -O2
+CXX = g++
+CXXFLAGS = -std=c++23 -Wall -Wextra -O2
 
 # Default day
 DAY ?= 1

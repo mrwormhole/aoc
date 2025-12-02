@@ -1,7 +1,6 @@
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <vector>
 
 constexpr uint START = 50;
 constexpr bool ENABLE_LOGGING = false;
