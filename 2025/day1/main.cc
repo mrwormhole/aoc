@@ -14,6 +14,7 @@ constexpr bool ENABLE_LOGGING = false;
 unsigned int processFile(std::ifstream &file) {
   unsigned int count = 0;
   unsigned int res = START;
+
   std::string line;
   while (std::getline(file, line)) {
     if (line.empty()) {
@@ -23,13 +24,11 @@ unsigned int processFile(std::ifstream &file) {
     char rotation = line[0];
     unsigned int units;
     try {
-
       units = std::stoi(line.substr(1));
     } catch (const std::exception &e) {
       LOG("ERR: Invalid format with line=" << line << std::endl);
       continue;
     }
-
     LOG("Rotation=" << rotation << ", Units=" << units);
 
     units = units % 100;
@@ -49,6 +48,7 @@ unsigned int processFile(std::ifstream &file) {
 unsigned int processFileV2(std::ifstream &file) {
   unsigned int count = 0;
   unsigned int res = START;
+
   std::string line;
   while (std::getline(file, line)) {
     if (line.empty()) {
@@ -63,7 +63,6 @@ unsigned int processFileV2(std::ifstream &file) {
       LOG("ERR: Invalid format with line=" << line << std::endl);
       continue;
     }
-
     LOG("Rotation=" << rotation << ", Units=" << units);
 
     // count how many times we land on 0 during this rotation
