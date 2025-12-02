@@ -1,18 +1,13 @@
 #include <cmath>
 #include <fstream>
-#include <iostream>
+#include <print>
 #include <sstream>
 #include <string>
 #include <vector>
 
+#include "../log.h"
+
 using namespace std;
-
-constexpr bool ENABLE_LOGGING = false;
-
-#define LOG(msg)                                                               \
-  if constexpr (ENABLE_LOGGING) {                                              \
-    cout << msg << std::endl;                                                  \
-  }
 
 vector<pair<unsigned long, unsigned long>>
 parseRanges(const std::string &line) {
@@ -28,7 +23,7 @@ parseRanges(const std::string &line) {
         unsigned long end = stoul(s.substr(dashPos + 1));
         ranges.push_back({start, end});
       } catch (const std::exception &e) {
-        LOG("ERR: Invalid range format: " << s);
+        log("ERR: Invalid range format: {}", s);
       }
     }
   }
@@ -48,7 +43,7 @@ unsigned long processFile(ifstream &file) {
     auto ranges = parseRanges(line);
 
     for (const auto &range : ranges) {
-      LOG("Range: " << range.first << "-" << range.second);
+      log("Range: {}-{}", range.first, range.second);
       for (auto i = range.first; i < range.second + 1; i++) {
         auto s = to_string(i);
         if (s.length() % 2 == 1) {
@@ -56,7 +51,7 @@ unsigned long processFile(ifstream &file) {
         }
         if (s.substr(0, s.length() / 2) ==
             s.substr(s.length() / 2, s.length() / 2)) {
-          LOG("Found special: " << i);
+          log("Found special: {}", i);
           res += i;
         }
       }
@@ -93,7 +88,7 @@ unsigned long processFileV2(ifstream &file) {
     auto ranges = parseRanges(line);
 
     for (const auto &range : ranges) {
-      LOG("Range: " << range.first << "-" << range.second);
+      log("Range: {}-{}", range.first, range.second);
       for (auto i = range.first; i < range.second + 1; i++) {
         auto s = to_string(i);
         bool found = false;
@@ -124,7 +119,7 @@ unsigned long processFileV2(ifstream &file) {
         }
 
         if (found) {
-          LOG("Found special: " << i);
+          log("Found special: {}", i);
           res += i;
         }
       }
@@ -141,18 +136,18 @@ int main(int argc, char *argv[]) {
 
   ifstream file(filename);
   if (!file.is_open()) {
-    cerr << "Error: Could not open file " << filename << endl;
+    log("ERR: Could not open file={}", filename);
     return 1;
   }
 
   unsigned long res = processFile(file);
-  cout << "Result 1=" << res << endl;
+  std::print("Result 1={}\n", res);
 
   file.clear();  // clear EOF flag
   file.seekg(0); // rewind to beginning
 
   unsigned long res2 = processFileV2(file);
-  cout << "Result 2=" << res2 << endl;
+  std::print("Result 2={}\n", res2);
 
   return 0;
 }

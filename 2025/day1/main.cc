@@ -1,14 +1,10 @@
 #include <fstream>
-#include <iostream>
+#include <print>
 #include <string>
 
-constexpr uint START = 50;
-constexpr bool ENABLE_LOGGING = false;
+#include "../log.h"
 
-#define LOG(msg)                                                               \
-  if constexpr (ENABLE_LOGGING) {                                              \
-    std::cout << msg << std::endl;                                             \
-  }
+constexpr uint START = 50;
 
 unsigned int processFile(std::ifstream &file) {
   unsigned int count = 0;
@@ -25,10 +21,10 @@ unsigned int processFile(std::ifstream &file) {
     try {
       units = std::stoi(line.substr(1));
     } catch (const std::exception &e) {
-      LOG("ERR: Invalid format with line=" << line << std::endl);
+      log("ERR: Invalid format with line={}", line);
       continue;
     }
-    LOG("Rotation=" << rotation << ", Units=" << units);
+    log("Rotation={}, Units={}", rotation, units);
 
     units = units % 100;
     if (rotation == 'R') {
@@ -59,10 +55,10 @@ unsigned int processFileV2(std::ifstream &file) {
     try {
       units = std::stoi(line.substr(1));
     } catch (const std::exception &e) {
-      LOG("ERR: Invalid format with line=" << line << std::endl);
+      log("ERR: Invalid format with line={}", line);
       continue;
     }
-    LOG("Rotation=" << rotation << ", Units=" << units);
+    log("Rotation={}, Units={}", rotation, units);
 
     // count how many times we land on 0 during this rotation
     if (rotation == 'R') {
@@ -81,7 +77,7 @@ unsigned int processFileV2(std::ifstream &file) {
       res = (res - (units % 100) + 100) % 100;
     }
 
-    LOG("Current=" << res << ", ZerosPassed=" << count);
+    log("Current={}, ZerosPassed={}", res, count);
   }
   return count;
 }
@@ -94,17 +90,17 @@ int main(int argc, char *argv[]) {
 
   std::ifstream file(filename);
   if (!file.is_open()) {
-    std::cerr << "Error: Could not open file " << filename << std::endl;
+    log("ERR: Could not open file={}", filename);
     return 1;
   }
 
   unsigned int res = processFile(file);
-  std::cout << "Result 1=" << res << std::endl;
+  std::print("Result 1={}\n", res);
 
   file.clear();  // clear EOF flag
   file.seekg(0); // rewind to beginning
 
   unsigned int res2 = processFileV2(file);
-  std::cout << "Result 2=" << res2 << std::endl;
+  std::print("Result 2={}\n", res2);
   return 0;
 }

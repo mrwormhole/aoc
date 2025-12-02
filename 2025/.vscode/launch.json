@@ -3,21 +3,12 @@
     "configurations": [
         {
             "name": "Debug Day",
-            "type": "cppdbg",
+            "type": "lldb-dap",
             "request": "launch",
             "program": "${workspaceFolder}/day${input:dayNumber}/main",
             "args": ["${input:inputFile}"],
             "cwd": "${workspaceFolder}/day${input:dayNumber}",
-            "preLaunchTask": "build-all-days",
-            "MIMode": "gdb",
-            "miDebuggerPath": "/usr/bin/gdb",
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ]
+            "preLaunchTask": "build-all-days"
         }
     ],
     "inputs": [

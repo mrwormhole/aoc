@@ -1,4 +1,7 @@
 {
+    "C_Cpp.default.compilerPath": "/usr/bin/clang++",
+    "C_Cpp.default.cppStandard": "c++23",
+    "C_Cpp.default.intelliSenseMode": "linux-clang-x64",
     "files.associations": {
         "array": "cpp",
         "atomic": "cpp",

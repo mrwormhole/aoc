@@ -1,4 +1,4 @@
-CXX = g++
+CXX = clang++
 CXXFLAGS = -std=c++23 -Wall -Wextra -O2
 
 # Default day
