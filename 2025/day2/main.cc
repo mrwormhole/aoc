@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "../log.h"
+#include "../log.hpp"
 
 using namespace std;
 

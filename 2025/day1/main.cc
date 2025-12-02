@@ -2,7 +2,7 @@
 #include <print>
 #include <string>
 
-#include "../log.h"
+#include "../log.hpp"
 
 constexpr uint START = 50;
 
