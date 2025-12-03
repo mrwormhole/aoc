@@ -11,6 +11,18 @@ constexpr uint START = 50;
 
 using namespace std;
 
+expected<unsigned int, runtime_error> to_uint(string_view sv) {
+  unsigned int result;
+  auto [_, ec] = from_chars(sv.data(), sv.data() + sv.size(), result);
+  if (ec == errc{0}) { // no err
+    return result;
+  }
+
+  auto err_msg = make_error_code(ec).message();
+  return unexpected(runtime_error(
+      format("failed parsing number ({}): {}", sv.data(), err_msg)));
+};
+
 expected<unsigned int, runtime_error> processFile(ifstream &file) {
   unsigned int count = 0;
   unsigned int res = START;
@@ -21,18 +33,15 @@ expected<unsigned int, runtime_error> processFile(ifstream &file) {
       continue;
     }
 
-    char rotation = line[0];
-    unsigned int units = 0;
-    try {
-      units = stoi(line.substr(1));
-    } catch (const exception &e) {
+    auto units_result = to_uint(line.substr(1));
+    if (!units_result.has_value()) {
       return unexpected(
           runtime_error(format("failed to parse units from line({}): ", line)
-                            .append(e.what())));
+                            .append(units_result.error().what())));
     }
-    log("Rotation={}, Units={}", rotation, units);
+    auto units = units_result.value() % 100;
 
-    units = units % 100;
+    char rotation = line[0];
     if (rotation == 'R') {
       res = (res + units) % 100;
     } else if (rotation == 'L') {
@@ -56,18 +65,15 @@ expected<unsigned int, runtime_error> processFileV2(ifstream &file) {
       continue;
     }
 
-    char rotation = line[0];
-    unsigned int units = 0;
-    try {
-      units = stoi(line.substr(1));
-    } catch (const exception &e) {
+    auto units_result = to_uint(line.substr(1));
+    if (!units_result.has_value()) {
       return unexpected(
           runtime_error(format("failed to parse units from line({}): ", line)
-                            .append(e.what())));
+                            .append(units_result.error().what())));
     }
-    log("Rotation={}, Units={}", rotation, units);
+    auto units = units_result.value();
 
-    // count how many times we land on 0 during this rotation
+    char rotation = line[0];
     if (rotation == 'R') {
       int zero_count = units / 100;
       if (res + (units % 100) >= 100) {

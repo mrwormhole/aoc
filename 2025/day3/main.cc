@@ -55,14 +55,14 @@ findLargestJoltage12(const std::string &batteries) {
 
   auto to_ulong = [](string_view sv) -> expected<unsigned long, runtime_error> {
     unsigned long result;
-    auto [ptr, ec] = from_chars(sv.data(), sv.data() + sv.size(), result);
+    auto [_, ec] = from_chars(sv.data(), sv.data() + sv.size(), result);
     if (ec == errc{0}) { // no err
       return result;
     }
 
-    auto err_str = make_error_code(ec).message();
+    auto err_msg = make_error_code(ec).message();
     return unexpected(runtime_error(
-        format("failed parsing number ({}): {}", sv.data(), err_str)));
+        format("failed parsing number ({}): {}", sv.data(), err_msg)));
   };
   return to_ulong(result);
 }

@@ -22,27 +22,27 @@ expected<Pairs, runtime_error> parseRanges(const string &line) {
 
   auto to_ulong = [](string_view sv) -> expected<unsigned long, runtime_error> {
     unsigned long result;
-    auto [ptr, ec] = from_chars(sv.data(), sv.data() + sv.size(), result);
+    auto [_, ec] = from_chars(sv.data(), sv.data() + sv.size(), result);
     if (ec == errc{0}) { // no err
       return result;
     }
 
-    auto err_str = make_error_code(ec).message();
+    auto err_msg = make_error_code(ec).message();
     return unexpected(runtime_error(
-        format("failed parsing number ({}): {}", sv.data(), err_str)));
+        format("failed parsing number ({}): {}", sv.data(), err_msg)));
   };
 
   while (getline(ss, s, ',')) {
-    size_t dashPos = s.find('-');
-    if (dashPos != string::npos) {
-      auto start = to_ulong(s.substr(0, dashPos));
+    size_t dash_idx = s.find('-');
+    if (dash_idx != string::npos) {
+      auto start = to_ulong(s.substr(0, dash_idx));
       if (!start.has_value()) {
         return unexpected(
             runtime_error(format("failed to parse range start({}): ", s)
                               .append(start.error().what())));
       }
 
-      auto end = to_ulong(s.substr(dashPos + 1));
+      auto end = to_ulong(s.substr(dash_idx + 1));
       if (!end.has_value()) {
         return unexpected(
             runtime_error(format("failed to parse range end({}): ", s)
