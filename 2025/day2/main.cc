@@ -1,3 +1,4 @@
+#include <charconv>
 #include <cmath>
 #include <expected>
 #include <format>
@@ -19,17 +20,36 @@ expected<Pairs, runtime_error> parseRanges(const string &line) {
   stringstream ss(line);
   string s;
 
+  auto to_ulong = [](string_view sv) -> expected<unsigned long, runtime_error> {
+    unsigned long result;
+    auto [ptr, ec] = from_chars(sv.data(), sv.data() + sv.size(), result);
+    if (ec == errc{0}) { // no err
+      return result;
+    }
+
+    auto err_str = make_error_code(ec).message();
+    return unexpected(runtime_error(
+        format("Unknown error parsing number ({}): {}", sv.data(), err_str)));
+  };
+
   while (getline(ss, s, ',')) {
     size_t dashPos = s.find('-');
     if (dashPos != string::npos) {
-      try {
-        unsigned long start = stoul(s.substr(0, dashPos));
-        unsigned long end = stoul(s.substr(dashPos + 1));
-        ranges.push_back({start, end});
-      } catch (const exception &e) {
-        return unexpected(runtime_error(
-            format("failed to parse range({}): ", s).append(e.what())));
+      auto start = to_ulong(s.substr(0, dashPos));
+      if (!start.has_value()) {
+        return unexpected(
+            runtime_error(format("failed to parse range start({}): ", s)
+                              .append(start.error().what())));
       }
+
+      auto end = to_ulong(s.substr(dashPos + 1));
+      if (!end.has_value()) {
+        return unexpected(
+            runtime_error(format("failed to parse range end({}): ", s)
+                              .append(end.error().what())));
+      }
+
+      ranges.push_back({start.value(), end.value()});
     }
   }
 
