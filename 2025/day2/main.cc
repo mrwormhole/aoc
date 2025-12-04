@@ -154,7 +154,7 @@ int main(int argc, char *argv[]) {
   }
 
   if (auto res = processFile(file); res.has_value()) {
-    print("Result 1={}\n", res.value());
+    println("Result 1={}", res.value());
   } else {
     log("processFile(): {}", res.error().what());
     return 1;
@@ -164,7 +164,7 @@ int main(int argc, char *argv[]) {
   file.seekg(0); // rewind to beginning
 
   if (auto res = processFileV2(file); res.has_value()) {
-    print("Result 2={}\n", res.value());
+    println("Result 2={}", res.value());
   } else {
     log("processFileV2(): {}", res.error().what());
     return 1;

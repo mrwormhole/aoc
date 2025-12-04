@@ -10,7 +10,7 @@
 
 using namespace std;
 
-int findLargestJoltage(const std::string &batteries) {
+int findLargestJoltage(const string &batteries) {
   int max_joltage = 0;
 
   for (size_t i = 0; i < batteries.size(); ++i) {
@@ -39,10 +39,10 @@ unsigned long processFile(ifstream &file) {
 }
 
 expected<unsigned long, runtime_error>
-findLargestJoltage12(const std::string &batteries) {
+findLargestJoltage12(const string &batteries) {
   const int k = 12;
   int to_remove = batteries.size() - k;
-  std::string result;
+  string result;
 
   for (char digit : batteries) {
     while (!result.empty() && result.back() < digit && to_remove > 0) {
@@ -100,14 +100,14 @@ int main(int argc, char *argv[]) {
   }
 
   if (auto res = processFile(file)) {
-    print("Result 1={}\n", res);
+    println("Result 1={}", res);
   }
 
   file.clear();  // clear EOF flag
   file.seekg(0); // rewind to beginning
 
   if (auto res = processFileV2(file)) {
-    print("Result 2={}\n", res);
+    println("Result 2={}", res);
   }
   return 0;
 }
