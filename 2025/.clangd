@@ -1,0 +1,23 @@
+CompileFlags:
+  Add:
+    - "-std=c++23"
+    - "-Wall"
+    - "-Wextra"
+  Compiler: clang++
+
+InlayHints:
+  Enabled: Yes
+  ParameterNames: Yes
+  DeducedTypes: Yes
+  Designators: Yes
+
+Diagnostics:
+  ClangTidy:
+    Add:
+      - modernize-*
+      - performance-*
+    Remove:
+      - modernize-use-trailing-return-type
+
+Hover:
+  ShowAKA: Yes

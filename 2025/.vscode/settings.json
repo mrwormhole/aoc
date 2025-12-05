@@ -2,6 +2,21 @@
     "C_Cpp.default.compilerPath": "/usr/bin/clang++",
     "C_Cpp.default.cppStandard": "c++23",
     "C_Cpp.default.intelliSenseMode": "linux-clang-x64",
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}",
+        "--clang-tidy",
+        "--header-insertion=never",
+        "--completion-style=detailed",
+        "--function-arg-placeholders",
+        "--fallback-style=llvm"
+    ],
+    "clangd.fallbackFlags": [
+        "-std=c++23"
+    ],
+    "editor.inlayHints.enabled": "on",
+    "clangd.inlayHints.parameters": true,
+    "clangd.inlayHints.deducedTypes": true,
     "files.associations": {
         "array": "cpp",
         "atomic": "cpp",
