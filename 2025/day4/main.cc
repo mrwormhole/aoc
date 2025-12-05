@@ -103,10 +103,10 @@ unsigned long processFileV2(ifstream &file) {
       break;
     }
 
-    ranges::for_each(to_remove, [&](const auto &pos) {
+    for (const auto &pos : to_remove) {
       const auto &[row, col] = pos;
       grid[row][col] = '.';
-    });
+    }
     total_removed += to_remove.size();
   }
   return total_removed;
