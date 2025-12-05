@@ -11,8 +11,7 @@
 
 using namespace std;
 
-// 8 directions
-constexpr auto directions = to_array<pair<int, int>>({
+constexpr auto DIRECTIONS = to_array<pair<int, int>>({
     {-1, 0},  // up
     {1, 0},   // down
     {0, -1},  // left
@@ -22,6 +21,21 @@ constexpr auto directions = to_array<pair<int, int>>({
     {1, -1},  // down-left
     {1, 1}    // down-right
 });
+
+// count adjacent '@' symbols for a position
+int countAdjacent(const vector<string> &grid, int rows_count, int cols_count,
+                  int row, int col) {
+  return ranges::count_if(
+      DIRECTIONS,
+      [&grid, rows_count, cols_count, row, col](const auto &dir) -> bool {
+        const auto &[dx, dy] = dir;
+        const int neighbor_row = row + dx;
+        const int neighbor_col = col + dy;
+        return neighbor_row >= 0 && neighbor_row < rows_count &&
+               neighbor_col >= 0 && neighbor_col < cols_count &&
+               grid[neighbor_row][neighbor_col] == '@';
+      });
+}
 
 unsigned long processFile(ifstream &file) {
   vector<string> grid;
@@ -37,39 +51,66 @@ unsigned long processFile(ifstream &file) {
     return 0;
   }
 
-  const auto rows = static_cast<int>(grid.size());
-  const auto cols = static_cast<int>(grid[0].size());
+  const auto rows_count = static_cast<int>(grid.size());
+  const auto cols_count = static_cast<int>(grid[0].size());
 
-  auto positions =
-      views::cartesian_product(views::iota(0, rows), views::iota(0, cols));
+  auto positions = views::cartesian_product(views::iota(0, rows_count),
+                                            views::iota(0, cols_count));
 
-  auto at_symbols = positions | views::filter([&](const auto &pos) {
+  auto at_symbols = positions | views::filter([&grid](const auto &pos) -> bool {
                       const auto &[row, col] = pos;
                       return grid[row][col] == '@';
                     });
 
-  return ranges::count_if(at_symbols, [&](const auto &pos) {
-    const auto &[row, col] = pos;
+  return ranges::count_if(
+      at_symbols, [&grid, rows_count, cols_count](const auto &pos) -> bool {
+        const auto &[row, col] = pos;
+        return countAdjacent(grid, rows_count, cols_count, row, col) < 4;
+      });
+}
 
-    // count adjacent '@' symbols
-    auto adjacent_count = directions | views::transform([&](const auto &dir) {
-                            const auto &[dr, dc] = dir;
-                            const int new_row = row + dr;
-                            const int new_col = col + dc;
-                            return make_pair(new_row, new_col);
-                          }) |
-                          views::filter([&](const auto &neighbor) {
-                            const auto &[r, c] = neighbor;
-                            return r >= 0 && r < rows && c >= 0 && c < cols;
-                          }) |
-                          views::filter([&](const auto &neighbor) {
-                            const auto &[r, c] = neighbor;
-                            return grid[r][c] == '@';
-                          }) |
-                          ranges::to<vector>();
+unsigned long processFile2(ifstream &file) {
+  vector<string> grid;
 
-    return adjacent_count.size() < 4;
-  });
+  string line;
+  while (getline(file, line)) {
+    if (!line.empty()) {
+      grid.push_back(line);
+    }
+  }
+
+  if (grid.empty()) {
+    return 0;
+  }
+
+  const auto rows_count = static_cast<int>(grid.size());
+  const auto cols_count = static_cast<int>(grid[0].size());
+
+  auto positions = views::cartesian_product(views::iota(0, rows_count),
+                                            views::iota(0, cols_count));
+
+  unsigned long total_removed = 0;
+  while (true) {
+    auto to_remove =
+        positions | views::filter([&](const auto &pos) -> bool {
+          const auto &[row, col] = pos;
+          return grid[row][col] == '@' &&
+                 countAdjacent(grid, rows_count, cols_count, row, col) < 4;
+        }) |
+        ranges::to<vector>();
+
+    if (to_remove.empty()) {
+      break;
+    }
+
+    ranges::for_each(to_remove, [&](const auto &pos) {
+      const auto &[row, col] = pos;
+      grid[row][col] = '.';
+    });
+    total_removed += to_remove.size();
+  }
+
+  return total_removed;
 }
 
 int main(int argc, char *argv[]) {
@@ -90,6 +131,10 @@ int main(int argc, char *argv[]) {
 
   file.clear();  // clear EOF flag
   file.seekg(0); // rewind to beginning
+
+  if (auto res = processFile2(file)) {
+    println("Result 2={}", res);
+  }
 
   return 0;
 }
