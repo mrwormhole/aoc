@@ -69,7 +69,7 @@ unsigned long processFile(ifstream &file) {
       });
 }
 
-unsigned long processFile2(ifstream &file) {
+unsigned long processFileV2(ifstream &file) {
   vector<string> grid;
 
   string line;
@@ -109,7 +109,6 @@ unsigned long processFile2(ifstream &file) {
     });
     total_removed += to_remove.size();
   }
-
   return total_removed;
 }
 
@@ -132,9 +131,8 @@ int main(int argc, char *argv[]) {
   file.clear();  // clear EOF flag
   file.seekg(0); // rewind to beginning
 
-  if (auto res = processFile2(file)) {
+  if (auto res = processFileV2(file)) {
     println("Result 2={}", res);
   }
-
   return 0;
 }
