@@ -1,10 +1,8 @@
 #include <expected>
 #include <fstream>
 #include <print>
-#include <ranges>
 #include <stdexcept>
 #include <string>
-#include <vector>
 
 #include "../log.hpp"
 
